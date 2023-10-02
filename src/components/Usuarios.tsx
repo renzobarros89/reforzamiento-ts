@@ -1,61 +1,65 @@
-import { useEffect, useState } from "react";
-import { reqResApi } from "../api/reqRes";
-import { ReqResListado, Usuario } from "../interfaces/reqRes";
+import { Usuario } from '../interfaces/reqRes';
+import { useUsuarios } from '../hooks/useUsuarios';
+
 
 export const Usuarios = () => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
-  useEffect(() => {
-    reqResApi
-      .get<ReqResListado>("/users")
-      .then((res) => {
-        setUsuarios(res.data.data);
-      })
-      .catch(console.log);
-  }, []);
+    const { usuarios, paginaAnterior, paginaSiguiente } = useUsuarios();
 
-  const renderItem = (usuario: Usuario) => {
-    const { id, avatar, first_name, last_name, email } = usuario;
+
+    const renderItem = ({ id, first_name, last_name, email, avatar }: Usuario ) => {
+        return (
+            <tr key={ id.toString() }>
+                <td>
+                    <img 
+                        src={ avatar } 
+                        alt={ first_name } 
+                        style={{
+                            width: 35,
+                            borderRadius: 100
+                        }}
+                    />
+                </td>
+                <td> { first_name  } { last_name } </td>
+                <td> { email }</td>
+            </tr>
+        )
+    }
+
     return (
-      <tr key={id}>
-        <td>
-          <img
-            src={avatar}
-            alt={first_name}
-            style={{
-              width: "35px",
-              borderRadius: "100px",
-            }}
-          />
-        </td>
-        <td>
-          {first_name} {last_name}
-        </td>
-        <td>{email}</td>
-      </tr>
-    );
-  };
+        <>
+            <h3>Usuarios:</h3>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Nombre</th>
+                        <th>email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        usuarios.map( renderItem )
+                    }
+                </tbody>
+            </table>
+            
 
-  return (
-    <>
-      <h3>Usuarios</h3>
+            <button
+                className="btn btn-primary"
+                onClick={ paginaAnterior }
+            >
+                Anteriores
+            </button>
 
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Avatar</th>
-            <th>Nombre</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuarios.map((usuario) => {
-            return renderItem(usuario);
-          })}
-        </tbody>
-      </table>
+            &nbsp;
 
-      <button className="btn btn-primary">Siguiente</button>
-    </>
-  );
-};
+            <button
+                className="btn btn-primary"
+                onClick={ paginaSiguiente }
+            >
+                Siguientes
+            </button>
+        </>
+    )
+}

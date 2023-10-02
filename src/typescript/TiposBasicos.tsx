@@ -1,20 +1,19 @@
+
+
 export const TiposBasicos = () => {
-  const nombre: string = "Renzo";
-  const edad: number = 123;
-  const activo: boolean = true;
 
-  const poderes: string[] = [
-    "Teleportacion",
-    "Teletransportacion",
-    "Telekinesis",
-  ];
+    const nombre: string = 'Fernando';
+    const edad: number = 35;
+    const estaActivo:boolean = false;
 
-  return (
-    <>
-      <h3>Tipos Basicos</h3>
-      {nombre} {edad} {activo ? "activo" : "inactivo"}
-      <br />
-      {poderes.join(", ")}
-    </>
-  );
-};
+    const poderes: (string|number)[] = []; // 'Velocidad','Volar','Respirar en el agua'
+    
+    return (
+        <>
+            <h3>Tipos básicos</h3>
+            { nombre }, { edad }, { (estaActivo) ? 'activo' : 'no activo' }
+            <br/>
+            { poderes.join(', ') }
+        </>
+    )
+}
